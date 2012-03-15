@@ -1,5 +1,5 @@
 {
-	"name": "MathML anywhere",
+	"name": "Math anywhere",
 	"description": "Render LaTeX & MathML formulas on any page you want",
 	"version": "1.0",
 	"icons": {
@@ -7,14 +7,11 @@
 		"128": "128.png"
 	},
 	"permissions": [
-		"tabs", "http://*/*"
+		"tabs", "http://*/*", "https://*/*"
 	],
 	"browser_action": {
 		"default_icon": "icon.png",
-		"default_title": "MathML",
-		"default_popup": "popup.html"
+		"default_title": "Enable Math on this domain"
 	},
-	"background": {
-		"scripts": ["background.js"]
-	}
+	"background_page": "background.html"
 }

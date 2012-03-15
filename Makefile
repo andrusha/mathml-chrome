@@ -15,12 +15,14 @@ release: dev
 
 	echo "Compressing extension"
 	cd $(RELEASE_DIR) ; \
-	zip ${NAME}.zip manifest.json icon.png 48.png 128.png popup.html
+	zip ${NAME}.zip manifest.json icon.png 48.png 128.png background.html mathml-chrome.js
 
 
 dev:
 	echo "Compiling HAML"
-	haml popup.haml ${RELEASE_DIR}/popup.html
+	for file in "background"; do \
+		haml $$file.haml ${RELEASE_DIR}/$$file.html; \
+	done
 
 	echo "Compiling coffee script"
-	coffee --compile --lint --join $(RELEASE_DIR)/${NAME}.js ${NAME}.coffee
+	coffee --compile --lint --join $(RELEASE_DIR)/${NAME}.js lib.coffee cached_storage.coffee ${NAME}.coffee
