@@ -75,7 +75,11 @@
     Math.prototype.processTab = function(tab) {
       var domain;
       domain = getDomain(tab.url);
-      if (this.domains.contains(domain)) return alert('yay!');
+      if (this.domains.contains(domain)) {
+        return chrome.tabs.executeScript(tab.id, {
+          file: 'inject.js'
+        });
+      }
     };
 
     Math.prototype.toggleTab = function(tab) {

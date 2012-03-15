@@ -14,7 +14,7 @@ class Math
 	processTab: (tab) ->
 		domain = getDomain(tab.url)
 		if @domains.contains domain
-			alert 'yay!'
+			chrome.tabs.executeScript tab.id, file: 'inject.js'
 
 	toggleTab: (tab) ->
 		domain = getDomain(tab.url)
