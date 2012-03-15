@@ -1,0 +1,40 @@
+!!!
+%html
+	%head
+		%title Math anywhere options page
+		%script{src: 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'}
+		%script{src: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js'}
+		%script{src: 'options.js'}
+		%style
+			:sass
+				*
+					margin: 0
+					padding: 0
+					border: 0
+
+				.container
+					width: 400px
+					margin: 100px auto
+					background: #F5F5FF
+					border-radius: 15px
+					border: 1px solid #EEF
+					padding: 30px
+
+				.domains
+					list-style: none
+					margin-left: 1em
+					color: #333
+					font: 16px Helvetica,arial,freesans,clean,sans-serif
+					line-height: 1.4
+
+				h1
+					font: 26px Helvetica,arial,freesans,clean,sans-serif
+					line-height: 1.4
+					color: #333
+					font-weight: 300
+					margin-bottom: 10px
+
+	%body
+		.container
+			%h1 Enabled domains:
+			%ul.domains
