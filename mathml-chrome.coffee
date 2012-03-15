@@ -2,13 +2,14 @@ class Math
 	constructor: ->
 		@domains = new CachedStorage 'enabled'
 
-	toggleIcon: (state, tab) ->
-		if state
-			chrome.browserAction.setIcon path: "icon_enabled.png", tabId: tab.id
-			chrome.browserAction.setTitle title: "Disable Math on this domain", tabId: tab.id
+	toggleIcon: (tab) ->
+		domain = getDomain(tab.url)
+		if @domains.contains domain
+			chrome.browserAction.setIcon path: "icon_enabled.png"
+			chrome.browserAction.setTitle title: "Disable MathML & LaTeX on #{domain}"
 		else
-			chrome.browserAction.setIcon path: "icon.png", tabId: tab.id
-			chrome.browserAction.setTitle title: "Enable Math on this domain", tabId: tab.id
+			chrome.browserAction.setIcon path: "icon.png"
+			chrome.browserAction.setTitle title: "Enable MathML & LaTeX on #{domain}"
 
 	processTab: (tab) ->
 		domain = getDomain(tab.url)
@@ -19,10 +20,8 @@ class Math
 		domain = getDomain(tab.url)
 		if @domains.contains domain
 			@domains.remove domain
-			@toggleIcon()
 		else
 			@domains.addOnce domain
-			@toggleIcon true
 		chrome.tabs.reload tab.id
 
 #
@@ -30,7 +29,13 @@ class Math
 math = new Math
 
 chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
-	math.processTab tab if changeInfo.status is 'complete'
+	if changeInfo.status is 'loading'
+		math.processTab tab
+		math.toggleIcon tab
+
+chrome.tabs.onActiveChanged.addListener (tabId, selectInfo) ->
+	chrome.tabs.get tabId, (tab) ->
+		math.toggleIcon tab
 
 chrome.browserAction.onClicked.addListener (tab) ->
 	math.toggleTab tab

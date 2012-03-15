@@ -52,24 +52,22 @@
       this.domains = new CachedStorage('enabled');
     }
 
-    Math.prototype.toggleIcon = function(state, tab) {
-      if (state) {
+    Math.prototype.toggleIcon = function(tab) {
+      var domain;
+      domain = getDomain(tab.url);
+      if (this.domains.contains(domain)) {
         chrome.browserAction.setIcon({
-          path: "icon_enabled.png",
-          tabId: tab.id
+          path: "icon_enabled.png"
         });
         return chrome.browserAction.setTitle({
-          title: "Disable Math on this domain",
-          tabId: tab.id
+          title: "Disable MathML & LaTeX on " + domain
         });
       } else {
         chrome.browserAction.setIcon({
-          path: "icon.png",
-          tabId: tab.id
+          path: "icon.png"
         });
         return chrome.browserAction.setTitle({
-          title: "Enable Math on this domain",
-          tabId: tab.id
+          title: "Enable MathML & LaTeX on " + domain
         });
       }
     };
@@ -85,10 +83,8 @@
       domain = getDomain(tab.url);
       if (this.domains.contains(domain)) {
         this.domains.remove(domain);
-        this.toggleIcon();
       } else {
         this.domains.addOnce(domain);
-        this.toggleIcon(true);
       }
       return chrome.tabs.reload(tab.id);
     };
@@ -100,7 +96,16 @@
   math = new Math;
 
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (changeInfo.status === 'complete') return math.processTab(tab);
+    if (changeInfo.status === 'loading') {
+      math.processTab(tab);
+      return math.toggleIcon(tab);
+    }
+  });
+
+  chrome.tabs.onActiveChanged.addListener(function(tabId, selectInfo) {
+    return chrome.tabs.get(tabId, function(tab) {
+      return math.toggleIcon(tab);
+    });
   });
 
   chrome.browserAction.onClicked.addListener(function(tab) {
