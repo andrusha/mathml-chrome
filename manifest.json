@@ -7,7 +7,7 @@
 		"128": "128.png"
 	},
 	"permissions": [
-		"tabs", "http://*/*", "https://*/*"
+		"tabs", "<all_urls>"
 	],
 	"browser_action": {
 		"default_icon": "icon.png",
