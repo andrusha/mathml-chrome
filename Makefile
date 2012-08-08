@@ -8,7 +8,7 @@ all: dev
 release: dev
 	echo "Optimizing with Closure compiler"
 	for file in "${NAME}" "inject" "options"; do \
-		closure --js $(RELEASE_DIR)/$$file.js --js_output_file $(RELEASE_DIR)/$$file.compiled.js --compilation_level SIMPLE_OPTIMIZATIONS ; \
+		closure-compiler --js $(RELEASE_DIR)/$$file.js --js_output_file $(RELEASE_DIR)/$$file.compiled.js --compilation_level SIMPLE_OPTIMIZATIONS ; \
 		mv $(RELEASE_DIR)/$$file.compiled.js $(RELEASE_DIR)/$$file.js ; \
 	done
 
