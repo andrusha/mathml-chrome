@@ -1,7 +1,8 @@
 {
+	"manifest_version": 2,
 	"name": "Math Anywhere",
 	"description": "Render LaTeX & MathML formulas on any page you want",
-	"version": "1.0",
+	"version": "1.0.1",
 	"icons": {
 		"48": "48.png",
 		"128": "128.png"
@@ -13,6 +14,8 @@
 		"default_icon": "icon.png",
 		"default_title": "Enable Math on this domain"
 	},
-	"background_page": "background.html",
+	"background": {
+		"scripts": ["mathml-chrome.js"]
+	},
 	"options_page": "options.html"
 }
