@@ -2,13 +2,15 @@
 
 RELEASE_DIR = ./release
 NAME = mathml-chrome
+CLOSURE=$(shell command -v closure-compiler >/dev/null 2>&1 && echo 'closure-compiler' || command -v closure >/dev/null 2>&1 && echo 'closure' || echo 'No closure compiler found'; exit 1)
 
 all: dev
 
 release: dev
-	echo "Optimizing with Closure compiler"
+
+	echo "Optimizing with ${CLOSURE} compiler"
 	for file in "${NAME}" "inject" "options"; do \
-		closure-compiler --js $(RELEASE_DIR)/$$file.js --js_output_file $(RELEASE_DIR)/$$file.compiled.js --compilation_level SIMPLE_OPTIMIZATIONS ; \
+		$(CLOSURE) --js $(RELEASE_DIR)/$$file.js --js_output_file $(RELEASE_DIR)/$$file.compiled.js --compilation_level SIMPLE_OPTIMIZATIONS ; \
 		mv $(RELEASE_DIR)/$$file.compiled.js $(RELEASE_DIR)/$$file.js ; \
 	done
 
@@ -22,7 +24,7 @@ release: dev
 
 dev:
 	echo "Compiling coffee script"
-	coffee --compile --lint --join $(RELEASE_DIR)/${NAME}.js lib.coffee cached_storage.coffee ${NAME}.coffee
+	(cat lib.coffee; echo;cat cached_storage.coffee; echo; cat ${NAME}.coffee) | coffee --compile --stdio > $(RELEASE_DIR)/${NAME}.js
 	for file in "inject" "options"; do \
-		coffee --compile --lint --join $(RELEASE_DIR)/$$file.js $$file.coffee; \
+		cat $$file.coffee | coffee --compile --stdio > $(RELEASE_DIR)/$$file.js; \
 	done
